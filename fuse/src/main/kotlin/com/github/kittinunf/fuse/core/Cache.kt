@@ -33,7 +33,11 @@ class Cache<T : Any>(cacheDir: String,
         configs += (name to value)
     }
 
-    private fun put(key: String, value: T, configName: String = Config.DEFAULT_NAME, success: ((T) -> Unit)? = null) {
+    fun put(key: String, value: T, configName: String = Config.DEFAULT_NAME, success: ((T) -> Unit)? = null) {
+        _put(key, value, configName, success)
+    }
+
+    private fun _put(key: String, value: T, configName: String = Config.DEFAULT_NAME, success: ((T) -> Unit)? = null) {
         configs[configName]?.let { (config, memCache, diskCache) ->
             dispatch(Fuse.dispatchedExecutor) {
                 applyConfig(value, config) { transformed ->
